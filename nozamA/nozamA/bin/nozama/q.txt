@@ -1,0 +1,252 @@
+package nozama;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class Main extends JFrame{
+
+    public Main(){
+        this.setSize(300, 200);
+        this.setVisible(false);
+        this.setResizable(false);
+        this.setTitle("nozamA!");
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+
+        Login login = new Login();
+        // Iniciando o "banco de dados".
+        Bd bancoDados = Bd.getInstance();
+
+         //Admin default do sistema.
+         bancoDados.getUserAdmin().add(new UserAdmin("admin", "123.456.789-10", "admin", "admin"));
+
+        /*** Atributos gráficos ***/
+
+        JButton log      = new JButton("Login");
+        JButton cadastro = new JButton("Cadastro");
+        JButton admin    = new JButton("Admin");
+        JButton exit     = new JButton("Exit");
+
+        log.setCursor(new Cursor(12));
+        cadastro.setCursor(new Cursor(12));
+        admin.setCursor(new Cursor(12));
+        exit.setCursor(new Cursor(12));
+
+        log.setBackground(new Color(20,200,200));
+        cadastro.setBackground(new Color(70,170,200));
+        admin.setBackground(new Color(120,150,200));
+        exit.setBackground(new Color(200,80,100));
+
+        GridLayout layout = new GridLayout(4, 1);
+
+        this.setLayout(layout);
+        this.add(log);
+        this.add(cadastro);
+        this.add(admin);
+        this.add(exit);
+        this.repaint();
+        //System.out.println("ok");
+        this.setVisible(true);
+
+
+        log.addActionListener(e -> {
+            int index = -1;
+            this.setVisible(false);
+
+            index = login.checkLogin();
+            
+            if(index > -1){
+                this.setVisible(false);
+                bancoDados.getUsers().get(index).menuProfile();
+            }
+            this.setVisible(true);
+        }); 
+
+        cadastro.addActionListener(e -> {
+            this.setVisible(false);
+            String message = login.setRegister();
+            JOptionPane.showMessageDialog(this, message);
+            this.setVisible(true);
+        });
+
+        admin.addActionListener(e -> {
+            int index;
+            this.setVisible(false);
+            index = login.checkLoginAdmin();
+
+            if(index > -1){
+                this.setVisible(false);
+                bancoDados.getUserAdmin().get(index).menuUserAdmin();
+            }
+            this.setVisible(true);
+        });
+
+        exit.addActionListener(e -> {
+            System.exit(0);
+        });
+    }
+
+    public static void main(String[] args) throws Exception {
+        new Main();
+    }
+}
+
+
+package nozama;
+
+import nozama.payment.BuyBoleto;
+import nozama.payment.BuyPix;
+import nozama.products.*;
+
+import java.util.Iterator;
+import java.util.Scanner;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Profile extends User{
+
+    Bd bancoDados = Bd.getInstance();
+    Scanner input = new Scanner(System.in);
+
+    public Profile(){
+        super();
+    }
+
+    private void clearJDialog(){
+        this.getContentPane().removeAll();
+        this.revalidate();
+        this.repaint();
+
+    }
+
+    Iterator<Product> itrProducts;
+    Iterator<Profile> itrProfiles;
+    Iterator<Message> itrMessages;
+
+    public void menuProfile(){
+        clearJDialog();
+        this.setTitle("Profile");
+        this.setLayout(new GridLayout(7,1));
+        this.setResizable(false);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setModal(true);
+        
+        String menuUser = "\n1 - Ver feed;\n"+
+        "2 - Postar produto;\n"+
+        "3 - Ver meu carrinho;\n"+
+        "4 - Ver meu produtos;\n"+
+        "5 - Ver mensagens;\n"+
+        "6 - Editar perfil;\n"+
+        "7 - Sair.\n=>";
+
+        String menuBuy = "\nGostaria de adicionar o produto ao seu carrinho?\n"+
+            "[1] - Sim\t[2] - Não\n=>";
+
+        String menuCart = "\nAçoes:\n"+
+                "[1] - Comprar;\n"+
+                "[2] - Remover;\n"+
+                "[3] - Continuar.\n=>";
+
+        String menuProduct = "\nAçoes:\n"+
+                "[1] - Editar;\n"+
+                "[2] - Remover;\n"+
+                "[3] - Continuar.\n=>";
+
+        String menuMessage = "\nAçoes:\n"+
+                "[1] - Responder;\n"+
+                "[2] - Remover;\n"+
+                "[3] - Continuar.\n=>";
+        String payment = "Qual a forma de pagamento:\n"+
+            "1 - Boleto;\n"+
+            "2 - Pix;\n=>";
+
+            
+            JButton feed    = new JButton("Feed");
+            JButton post    = new JButton("Criar Produto");
+            JButton cart    = new JButton("Carrinho");
+            JButton product = new JButton("Produtos");
+            JButton message = new JButton("Messagem");
+            JButton edit    = new JButton("Perfil");
+            JButton exit    = new JButton("Sair");
+
+            feed.setCursor(new Cursor(12));
+            post.setCursor(new Cursor(12));
+            cart.setCursor(new Cursor(12));
+            product.setCursor(new Cursor(12));
+            message.setCursor(new Cursor(12));
+            edit.setCursor(new Cursor(12));
+            exit.setCursor(new Cursor(12));
+
+            feed.setBackground(new Color(0,200,200));
+            post.setBackground(new Color(0,200,200));
+            cart.setBackground(new Color(0,200,200));
+            product.setBackground(new Color(0,200,200));
+            message.setBackground(new Color(0,200,200));
+            edit.setBackground(new Color(0,200,200));
+            exit.setBackground(new Color(200,80,100));
+
+            this.add(feed);
+            this.add(post);
+            this.add(cart);
+            this.add(product);
+            this.add(message);
+            this.add(edit);
+            this.add(exit);
+
+            this.pack();
+            this.repaint();
+
+            feed.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                }
+            });
+
+            post.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                }
+            });
+
+            cart.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                }
+            });
+
+            product.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                }
+            });
+
+            message.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                }
+            });
+
+            edit.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                }
+            });
+
+            exit.addActionListener(e -> {
+                dispose();
+            });
+
+            this.setVisible(true);
+
+    }
+
+    private boolean menuBuy(){
+        String messageMenuBuy = "Gostaria de adicionar o produto ao seu carrinho?";
+        String title = "Adicionar ao carrinho";
+        JOptionPane.showConfirmDialog(this, messageMenuBuy, title, 4);
+        return true;
+    }
+} 
