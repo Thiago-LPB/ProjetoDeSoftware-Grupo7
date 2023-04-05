@@ -6,7 +6,7 @@ Repositório dedicado as aplicabilidades dadas na matéria de projeto de softwar
 - **Pedro de Carvalho Cedrim**     (pcc@ic.ufal.br);
 - **Tiago Lôbo Pereira Barros**    (tlpb@ic.ufal.br).
 
->Os projeto usando os conceitos enocntram-se na Branch "java_project".
+>Os projetos usando os conceitos enocontram-se na Branch "java_project".
 
 ## Projeto
 
