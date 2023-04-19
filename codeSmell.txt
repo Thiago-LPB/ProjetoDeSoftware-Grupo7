@@ -1,0 +1,33 @@
+	duplicated code:
+
+=> na classe Message() todos os métodos são usados "setar" a origem da mensagem e o como a mensagem será construida e retornada pelo tostring().
+
+=> a classe Login() entre os metodos checkLogin() e checkLginAdmin() que fazem semanticamente a mesma coisa, verificar 
+   se a conta estar registrada e efetuar o login, setRegister() o proprio método é repetitivo
+
+=> na classe Profile() no métodp creatProduct() nos butoes ao informar os usuários de um novo produto e os métodos show*()
+
+=> na classe userAdmin nas classes show*()
+
+	data clumps: 
+
+=> a classe Message() entre os metodos de ajustar as mensagens
+
+	Feature Envy: 
+
+=> na classe Profile() com o método menuBuy()
+
+=> na classe User() o método config(), não sei se realmente é um codeSmell, pois ele não faz nada, mas configura a janela.
+
+	Middle man:
+
+=> os metodos da classe Message()m menos o toString();
+
+	data class:
+
+=> a classe Bd() existe apenas para armazenas os protudos e tipos de usuários e metodos para retornar os dados.
+
+
+
+
+
