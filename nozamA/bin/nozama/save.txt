@@ -1,0 +1,84 @@
+private void showMyProduct(){
+        itrProfiles = this.getUsers().iterator();
+        this.profiles = itrProducts.next();
+
+        while(itrProducts.hasNext()){
+            this.aux = true;
+
+            while(this.aux){
+                this.pause = false;
+
+                JDialog window = new JDialog(this);
+                window.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                window.setModal(true);
+                window.setLayout(new BorderLayout());
+                window.getContentPane().setBackground(new Color(51,60,76));
+                window.setTitle("Usuários");
+                window.setResizable(false);
+
+                JPanel panel = new JPanel();
+                JPanel menu = new  JPanel(new GridLayout(1,4));
+
+                JButton cancelar = new JButton("Cancelar");
+                JButton mensagem = new JButton("Mensagem");
+                JButton next     = new JButton("Próximo");
+                JButton excluir  = new JButton("Excluir");
+
+                cancelar.setCursor(new Cursor(12));
+                mensagem.setCursor(new Cursor(12));
+                next.setCursor(new Cursor(12));
+                excluir.setCursor(new Cursor(12));
+
+                cancelar.setBackground(new Color(200,80,100));
+                mensagem.setBackground(new Color(225,127,17));
+                next.setBackground(new Color(225,127,17));
+                excluir.setBackground(new Color(250,50,50));
+
+                menu.add(cancelar);
+                meun.add(mensagem);
+                menu.add(next);
+                menu.add(excluir);
+
+                JTextArea dados = new JTextArea(this.profile.toString());
+                dados.setEditable(false);
+                dados.setBackground(Color.lightGray);
+                panel.setBackground(Color.lightGray);
+                panel.add(dados);
+
+                window.add(panel, BorderLayout.CENTER);
+                window.add(menu, BorderLayout.SOUTH);
+
+
+                cancelar.addActionListener(e ->{
+                    this.pause = true;
+                    this.aux = false;
+                    window.dispose();
+                });
+
+                mensagem.addActionListener(e -> {
+                    setVisible(false);
+                    sendMessage(this.profile);
+                    setVisible(true);
+                });
+
+                next.addActionListener(e ->{
+                    this.aux = false;
+                    this.profile = itrProfiles.next();
+                    window.dispose();
+                });
+
+                excluir.addActionListener(e ->{
+                    itrProducts.remove();
+                    bancoDados.getUsers().remove(product);
+                    JOptionPane.showMessageDialog(this, "Produto removido!");
+                    window.dispose();
+                    this.aux = false;
+                });
+                
+                window.pack();
+                window.setVisible(true);
+            }
+            if(this.pause) break;
+        }
+
+    }
